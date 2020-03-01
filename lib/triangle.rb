@@ -1,40 +1,34 @@
 require 'pry'
 class Triangle
-  def initialize(side_1, side_2, side_3)
-    @triangle_sides = []
-    @triangle_sides << side_1
-    @triangle_sides << side_2
-    @triangle_sides << side_3
-  end
-
-  def valid?
-    sum_one_two = @triangle_sides[0] + @triangle_sides[1]
-    sum_one_three = @triangle_sides[0] + @triangle_sides[2]
-    sum_two_three = @triangle_sides[1] + @triangle_sides[2]
-
-    if (@triangle_sides.none? {|side| side <= 0}) &&
-      (sum_one_two > @triangle_sides[2] && sum_one_three > @triangle_sides[1] && sum_two_three > @triangle_sides[0])
-      return true
-    else
-      return false
+  attr_accessor :side_one, :side_two, :side_three
+    
+    def initialize(side_one,side_two,side_three)
+      @side_one = side_one
+      @side_two = side_two
+      @side_three = side_three
     end
-  end
-
-  def kind
-    if valid?
-      if @triangle_sides.uniq.length == 1
-        return :equilateral
-      elsif @triangle_sides.uniq.length == 2
-        return :isosceles
-      else
-        return :scalene
-      end
-    else
+    
+    def kind
+     if (side_one <= 0) || (side_two <= 0) || (side_three <= 0)
       raise TriangleError
+    elsif (side_one+side_two <= side_three) || (side_one+side_three <= side_two) || (side_two+side_three <= side_one)
+      raise TriangleError 
+      
+    else
+      if side_one == side_two && side_one == side_three
+        return "equilateral".to_sym
+      elsif side_two == side_three || side_one == side_three || side_one == side_two
+        return "isosceles".to_sym
+      elsif side_one != side_two && side_one != side_three
+        return "scalene".to_sym
+        end
     end
+
   end
-end
 
-class TriangleError < StandardError
 
+    class TriangleError < StandardError
+      
+    
+  end
 end
